@@ -9,6 +9,8 @@
 #include "UART.h"
 #include "xmem.h"
 #include <stdlib.h>
+#include <util/delay.h>
+
     void SRAM_test(void)
     {
 	    volatile char *ext_ram = (char *) 0; // Start address for the SRAM 0x1800
@@ -30,16 +32,38 @@
 	    // reset the PRNG to the state it had before the write phase
 	    printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
     }
-
+	
+	void pwm_init_og(void) {
+		DDRD |=(1<<PD4);
+		TCCR3A = 0x00;
+		TCCR3B = 0x00;
+		TCCR3A = (1<<COM3A1) | (1<<COM3B1) | (0<<WGM31) | (1<<WGM30);
+		TCCR3B = (0<<WGM33) | (1<<WGM32) |(1<<CS30);
+		OCR3B = 0;
+		};
+void pwm_init(void) {
+		DDRD |=(1<<DDD4);
+		TCCR3A = (0<<COM3A0) | (1<<COM3A1) | (0<<WGM31) | (1<<WGM30);
+		TCCR3B = (0<<ICES3) | (1<<WGM32) |(1<<CS30);
+		OCR3B = 0;
+	};
 int main(void)
 {
+	pwm_init();
 	USART_Init(MYUBRR);
 	init_printf();
 	xmem_init();
-	SRAM_test();
+	printf("Hei");
     /* Replace with your application code */
-    while (0) 
+    while (1) 
     {
+		volatile char *adc=(char *) 0x1400;
+		adc[0]=16;
+		_delay_ms(10);
+		uint16_t value=adc[0];
+		printf("Adc-verdi: %u\n\n",value);
+		_delay_ms(10);
+		
     }
 }
 

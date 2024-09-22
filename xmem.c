@@ -1,6 +1,5 @@
 #include "xmem.h"
 
-
 void xmem_init ( void ){
 	MCUCR |= (1 << SRE ); // enable XMEM
 	SFIOR &= ~(1 << XMM1 | 1 << XMM0); // mask bits / reduce bus width

@@ -120,6 +120,15 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Debug\fonts.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="fonts.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="fonts.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="io.c">
       <SubType>compile</SubType>
     </Compile>

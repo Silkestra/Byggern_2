@@ -11,28 +11,6 @@
 #include <util/delay.h>
 #include "io.h"
 
-    void SRAM_test(void)
-    {
-	    volatile char *ext_ram = (char *) 0; // Start address for the SRAM 0x1800
-	    uint16_t ext_ram_size = 0x1FFF;
-	    uint16_t write_errors = 0;
-	    uint16_t retrieval_errors = 0;
-	    printf("Starting SRAM test...\n");
-	    // rand() stores some internal state, so calling this function in a loop will
-	    // yield different seeds each time (unless srand() is called before this function)
-	    uint16_t seed = rand();
-	    // Write phase: Immediately check that the correct value was stored
-	    srand(seed);
-	    for (uint16_t i = 0; i < ext_ram_size; i += 4) {
-		    uint8_t some_value = rand();
-		    ext_ram[i] = some_value;
-		    printf("%d",i);
-	    }
-	    // Retrieval phase: Check that no values were changed during or after the write phase
-	    // reset the PRNG to the state it had before the write phase
-	    printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase\n\n", write_errors, retrieval_errors);
-    }
-
 void pwm_init_og(void) {
 		DDRD |=(1<<PD4);
 		TCCR3A = 0x00;
@@ -55,11 +33,47 @@ int main(void)
 	USART_Init(MYUBRR);
 	init_printf();
 	xmem_init();
-	printf("Hei");
+	//printf("Hei");
+	oled_init();
+	//xmem_write(0xb2, 0, oled_command);
+	//xmem_write(0x20, 0, oled_command);
+	//xmem_write(0x10, 0, oled_command);
 	IO io;
     /* Replace with your application code */
+	for(int seg=0; seg<8*128+1; seg++){
+		//xmem_write(0b00000000,0,oled_data);
+	}
+	
+	OLED_reset();
+	
+	OLED_pos(0, 0);
+	for(int row = 0; row < 8; row++){
+		for(int column = 0; column < 128; column++){
+			OLED_pos(row,column);
+			if(row == 0 || row == 7){
+				OLED_write_data('_');
+			}
+			if(column == 0 || column == 120){
+				OLED_write_data('|');
+			}
+		}
+	}
+	
+	OLED_pos(1, 50);
+	OLED_write_data('H');
+	OLED_write_data('O');
+	OLED_write_data('M');
+	OLED_write_data('E');
+	
+	//const unsigned char A[] = {0b01111100,0b01111110,0b00010011,0b00010011,0b01111110,0b01111100,0b00000000,0b00000000};
     while (1) 
     {
+		
+		for(int j=0; j<8; j++){
+			//xmem_write(A[j], 0, oled_data);
+			_delay_ms(60);
+		}
+		
 		/*volatile char *adc=(char *) 0x1400;
 		adc[0]=16;
 		_delay_ms(10);
@@ -67,9 +81,10 @@ int main(void)
 		printf("Adc-verdi: %u\n\n",value);
 		_delay_ms(10);*/
 		
-		setStates(&io);
-		getStates(&io);
-		_delay_ms(200);
+		//setStates(&io);
+		//getStates(&io);
+		//SRAM_test();
+		
     }
 }
 

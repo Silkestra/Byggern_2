@@ -12,68 +12,45 @@
 #include "io.h"
 
 void pwm_init_og(void) {
-		DDRD |=(1<<PD4);
-		TCCR3A = 0x00;
-		TCCR3B = 0x00;
-		TCCR3A = (1<<COM3A1) | (1<<COM3B1) | (0<<WGM31) | (1<<WGM30);
-		TCCR3B = (0<<WGM33) | (1<<WGM32) |(1<<CS30);
-		OCR3B = 0;
-		};
+	DDRD |=(1<<PD4);
+	TCCR3A = 0x00;
+	TCCR3B = 0x00;
+	TCCR3A = (1<<COM3A1) | (1<<COM3B1) | (0<<WGM31) | (1<<WGM30);
+	TCCR3B = (0<<WGM33) | (1<<WGM32) |(1<<CS30);
+	OCR3B = 0;
+};
 		
 void pwm_init(void) {
-		DDRD |=(1<<DDD4);
-		TCCR3A = (0<<COM3A0) | (1<<COM3A1) | (0<<WGM31) | (1<<WGM30);
-		TCCR3B = (0<<ICES3) | (1<<WGM32) |(1<<CS30);
-		OCR3B = 0;
-	};
-	
+	DDRD |=(1<<DDD4);
+	TCCR3A = (0<<COM3A0) | (1<<COM3A1) | (0<<WGM31) | (1<<WGM30);
+	TCCR3B = (0<<ICES3) | (1<<WGM32) |(1<<CS30);
+	OCR3B = 0;
+};
+
 int main(void)
 {
+	/* Replace with your application code */
 	pwm_init();
 	USART_Init(MYUBRR);
 	init_printf();
 	xmem_init();
-	//printf("Hei");
 	oled_init();
-	//xmem_write(0xb2, 0, oled_command);
-	//xmem_write(0x20, 0, oled_command);
-	//xmem_write(0x10, 0, oled_command);
-	IO io;
-    /* Replace with your application code */
-	for(int seg=0; seg<8*128+1; seg++){
-		//xmem_write(0b00000000,0,oled_data);
-	}
-	
+	IO io = {0, 0, 0, 0, NEUTRAL, 0, 2, 0};
 	OLED_reset();
+	//OLED_print("Snabel");
 	
-	OLED_pos(0, 0);
-	for(int row = 0; row < 8; row++){
-		for(int column = 0; column < 128; column++){
-			OLED_pos(row,column);
-			if(row == 0 || row == 7){
-				OLED_write_data('_');
-			}
-			if(column == 0 || column == 120){
-				OLED_write_data('|');
-			}
-		}
-	}
+	//const char* home_menu[] = {"HOME", "Menu 1", "Menu 2", "Menu 3", "Menu 4", "Menu 5"};
+	int16_t menu_length = sizeof(home_menu) / sizeof(home_menu[0]);
+	//OLED_home(home_menu, menu_length);
+	OLED_print_menu(home_menu, menu_length);
 	
-	OLED_pos(1, 50);
-	OLED_write_data('H');
-	OLED_write_data('O');
-	OLED_write_data('M');
-	OLED_write_data('E');
+	//const char* menu1[] = {"Menu 1", "HOME", "Test 1", "Test 2"};
+	int16_t menu1_length = sizeof(menu1) / sizeof(menu1[0]);
 	
-	//const unsigned char A[] = {0b01111100,0b01111110,0b00010011,0b00010011,0b01111110,0b01111100,0b00000000,0b00000000};
+	
+	
     while (1) 
     {
-		
-		for(int j=0; j<8; j++){
-			//xmem_write(A[j], 0, oled_data);
-			_delay_ms(60);
-		}
-		
 		/*volatile char *adc=(char *) 0x1400;
 		adc[0]=16;
 		_delay_ms(10);
@@ -81,8 +58,8 @@ int main(void)
 		printf("Adc-verdi: %u\n\n",value);
 		_delay_ms(10);*/
 		
-		//setStates(&io);
-		//getStates(&io);
+		set_states(&io);
+		get_states(&io);
 		//SRAM_test();
 		
     }

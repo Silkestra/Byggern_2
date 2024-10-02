@@ -8,6 +8,8 @@ io.c
 
 main.c
 
+SPI.c
+
 UART.c
 
 xmem.c

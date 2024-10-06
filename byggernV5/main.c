@@ -55,11 +55,15 @@ int main(void)
 	
 	menu_init(&io);
 	SPI_master_init();
-	
+	//can_cntrl_config();
 	
     while (1) 
     {
-		SPI_MasterTransmit('b');
+		SPI_SS_low();
+		SPI_MasterTransmit(0x02);
+		SPI_MasterTransmit(0xAB);
+		SPI_SS_high();
+		 _delay_ms(100);
 		/*volatile char *adc=(char *) 0x1400;
 		adc[0]=16;
 		_delay_ms(10);

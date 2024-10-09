@@ -1,13 +1,6 @@
-#include <avr/io.h>
+#include "SPI.h"
 
 
-void SPI_SS_low(void);
-
-void SPI_SS_high(void);
-
-//SPI functions
-void SPI_master_init(void);
-uint8_t SPI_MasterTransmit(char cData);
 
 //CAN Controller functions
 void can_cntrl_config(void);

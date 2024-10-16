@@ -30,13 +30,12 @@ void pwm_init(void) {
 	OCR3B = 0;
 };
 
-
-
 int main(void)
 {
 	/* Replace with your application code */
 	pwm_init();
 	USART_Init(MYUBRR);
+
 	init_printf();
 	xmem_init();
 	oled_init();
@@ -84,22 +83,10 @@ int main(void)
 		uint8_t out1 = can_cntrl_read(RXB0D0);
 		uint8_t out2 = can_cntrl_read(RXB0D1);
 		*/
-	can_message_send(&msg);
-	can_message out = can_message_read();
-	
-		printf("D0: %02x\n", out.data[0]);
-		printf("D1: %02x\n", out.data[1]);
-		printf("Dlc: %02x\n", out.data_length);
-		printf("id: %02x\n", out.id);
-	//}
-	
-
-	
 	
     while (1) 
     {
-		
-		
+		can_message_send(&msg);
 		//Write 
 		
 		/*volatile char *adc=(char *) 0x1400;

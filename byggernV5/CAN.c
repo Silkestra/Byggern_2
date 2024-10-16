@@ -70,7 +70,7 @@ void can_cntrl_config(void){
 	SPI_SS_low();
 	
 	float T_Q = 0.00000025; //Satt en random verdi, ikke sikkert det fungerer (studass)
-	long F_OSC = 16 * 10^6;
+	long F_OSC = 16 * 1000000;
 	int BRP = (T_Q * F_OSC / 2) - 1;
 	
 	uint8_t cnf1_value = (1 << 6) | BRP;
@@ -84,7 +84,7 @@ void can_cntrl_config(void){
 	//Set operation mode
 	int8_t canctrl_value = can_cntrl_read(CANCTRL);
 	canctrl_value &= ~(0xE0);
-	canctrl_value |= (0x02 << 5);
+	canctrl_value |= (0x00 << 5);
 	
 	can_cntrl_write(CANCTRL, canctrl_value);
 	

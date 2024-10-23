@@ -19,6 +19,7 @@ void SPI_master_init(void){
 
 uint8_t SPI_MasterTransmit(char cData){
 	SPDR = cData; //Start transmission
-	while(!(SPSR & (1<<SPIF))); //Wait for transmission complete
+	while(!(SPSR & (1<<SPIF))){
+		} //Wait for transmission complete
 	return SPDR;
 }

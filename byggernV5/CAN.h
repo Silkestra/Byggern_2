@@ -22,4 +22,4 @@ void can_cntrl_RTS(int8_t transmit_buffers);
 void can_cntrl_bit_mod(int8_t address, int8_t data, int8_t mask);
 int8_t can_cntrl_read_status(void);
 void can_message_send (can_message * msg);
-can_message can_message_read (void);
+can_message can_message_read (int buffer);

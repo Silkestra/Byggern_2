@@ -73,7 +73,6 @@ void find_joy_dir(IO* io){
 
 void set_states(IO* io){
 	xmem_write(16, adc_adr, BASE_ADDRESS);
-	
 	io->joy_x = convert(xmem_read(adc_adr, BASE_ADDRESS));
 	io->joy_y = convert(xmem_read(adc_adr, BASE_ADDRESS));
 	//io->slider_l = xmem_read(adc_adr,BASE_ADDRESS)-9216;
@@ -115,7 +114,7 @@ int16_t get_slider_r(IO* io){
 
 bool read_button(IO* io){
 	PORTB = (1 << PB2);
-	DDRB = (0 << DDB2);
+	DDRB &= ~(1 << DDB2);
 	SFIOR = (0 << PUD);
 	//printf("Button: %d \n", button);
 	bool button_state = false;
@@ -315,8 +314,8 @@ void OLED_print_menu_2(menu_item* parent){
 void menu_init(IO *io){
 	menu_item *menu = create_menu_item("Home", NULL); 
 	
-	const char* home_menu[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4"};
-	add_submenu_from_list(menu, home_menu, 4);
+	const char* home_menu[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4", "Menu 5"};
+	add_submenu_from_list(menu, home_menu, 5);
 	io->current_node = menu->first_child;
 	const char* home_menu1[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4", "Back"};
 	add_submenu_from_list(menu->first_child, home_menu1, 5);

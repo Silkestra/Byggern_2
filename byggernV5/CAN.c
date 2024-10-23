@@ -1,6 +1,6 @@
 #include "CAN.h"
 #include <util/delay.h>
-
+#include "stdlib.h"
 
 
 //CAN Controller functions
@@ -15,11 +15,17 @@ uint16_t can_cntrl_read(uint8_t address){
 }
 
 void can_cntrl_write(int8_t address, int8_t data){
+	
 	SPI_SS_low();
+	
 	SPI_MasterTransmit(0x02);
+	
 	SPI_MasterTransmit(address);
+	
 	SPI_MasterTransmit(data);
+	
 	SPI_SS_high();
+	
 }
 
 void can_cntrl_reset(void){
@@ -69,13 +75,14 @@ void can_cntrl_config(void){
 	_delay_ms(1); //delay viktig 
 	SPI_SS_low();
 	
-	float T_Q = 0.00000025; //Satt en random verdi, ikke sikkert det fungerer (studass)
+	float T_Q = 0.0000005; //Satt en random verdi, ikke sikkert det fungerer (studass)
 	long F_OSC = 16 * 1000000;
 	int BRP = (T_Q * F_OSC / 2) - 1;
 	
-	uint8_t cnf1_value = (1 << 6) | BRP;
-	uint8_t cnf2_value = (1 << 7) | (1 << 3) | 1;
-	uint8_t cnf3_value = 2;
+	
+	uint8_t cnf1_value = (2 << 6) | 3;
+	uint8_t cnf2_value = (1 << 7) | (6 << 3) | 0 << 6;
+	uint8_t cnf3_value = 5;
 	
 	can_cntrl_write(CNF1, cnf1_value);
 	can_cntrl_write(CNF2, cnf2_value);
@@ -83,8 +90,10 @@ void can_cntrl_config(void){
 	
 	//Set operation mode
 	int8_t canctrl_value = can_cntrl_read(CANCTRL);
+	//printf("%d", canctrl_value);
 	canctrl_value &= ~(0xE0);
 	canctrl_value |= (0x00 << 5);
+	//printf("%d", canctrl_value);
 	
 	can_cntrl_write(CANCTRL, canctrl_value);
 	
@@ -106,28 +115,45 @@ void can_cntrl_config(void){
 }
 
 void can_message_send (can_message * msg ) {
-	can_cntrl_write(TXB0SIDH, msg->id >> 3); 
-	can_cntrl_write(TXB0SIDL, (msg->id & 0x07) << 5); 
+	can_cntrl_write(TXB0SIDH, msg->id >> 3);
+	can_cntrl_write(TXB0SIDL, (msg->id & 0x07) << 5);
 	can_cntrl_write(TXB0DLC, msg->data_length);
 	
 	for (int i = 0; i < msg->data_length; i++){
 		can_cntrl_write(TXB0D0+i, msg->data[i]);
 	}
 	can_cntrl_RTS(0x01);
+	
 }
 
 
-can_message can_message_read (void) {
+can_message can_message_read (int buffer) {
 	can_message msg; 
-    uint8_t high = can_cntrl_read(RXB0SIDH);
-    uint8_t low = can_cntrl_read(RXB0SIDL);
-
+	uint8_t sidh;
+	uint8_t sidl;
+	uint8_t dlc;
+	uint8_t dOO;
+	if(buffer==0){
+		sidh=RXB0SIDH;
+		sidl=RXB0SIDL;
+		dlc=RXB0DLC;
+		dOO=RXB0D0;
+	}
+	if(buffer==1){
+			sidh=RXB1SIDH;
+			sidl=RXB1SIDL;
+			dlc=RXB1DLC;
+			dOO=RXB1D0;
+	}
+	
+    uint8_t high = can_cntrl_read(sidh);
+    uint8_t low = can_cntrl_read(sidl);
    
     msg.id = (high << 3) | (low >> 5);
-	msg.data_length = can_cntrl_read(RXB0DLC);
+	msg.data_length = can_cntrl_read(dlc);
 	
 	for (int i = 0; i < msg.data_length; i++){
-		msg.data[i] = can_cntrl_read(RXB0D0 + i);
+		msg.data[i] = can_cntrl_read(dOO + i);
 	}
 	return msg;
 }

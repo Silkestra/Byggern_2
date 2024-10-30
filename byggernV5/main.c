@@ -30,21 +30,6 @@ void pwm_init(void) {
 	OCR3B = 0;
 };
 
-can_message send_joy_pos(IO* io){
-	//get_joy_x(&)
-	char x_position = get_joy_x(io);
-	if(x_position > 249){
-		x_position = 0;
-	}
-	char y_position = get_joy_y(io);
-	if(y_position > 249){
-		y_position = 0;
-	}
-	
-	can_message msg = {0x7ff, 0x02, {x_position, y_position}};
-	return msg;
-}
-
 int main(void)
 {
 	/* Replace with your application code */
@@ -75,7 +60,7 @@ int main(void)
 	can_cntrl_config();
 	//printf(io.joy_x);
 	
-	
+	can_message msg = {0x7ff, 0x02, {0xa0, 0x54}};
 	
 	//Write
 	/*
@@ -100,8 +85,8 @@ int main(void)
 		uint8_t out2 = can_cntrl_read(RXB0D1);
 		*/
 	can_message joy_msg={};
-	can_message recived={};
-	can_message msg;
+	can_message received={};
+	//can_message msg;
     while (1) 
     {
 		
@@ -116,23 +101,27 @@ int main(void)
 		_delay_ms(10);*/
 		
 		set_states(&io);
-		//get_states(&io);
+		//can_message_send(&msg);
+		//_delay_ms(10);
+		get_states(&io);
 		
-		msg = can_message_read(0);
+		/*msg = can_message_read(0);
 		printf("%x\n",msg.data[0]);
-		printf("%x\n",msg.data[1]);
-		msg = can_message_read(1);
+		printf("%x\n",msg.data[1]);*/
+		/*msg = can_message_read(1);
 		printf("%x\n",msg.data[0]);
-		printf("%x\n",msg.data[1]);
-		msg = can_message_read(2);
+		printf("%x\n",msg.data[1]);*/
+		
+		/*msg = can_message_read(2);
 		printf("%x\n",msg.data[0]);
-		printf("%x\n",msg.data[1]);
-		//joy_msg=send_joy_pos(&io);
+		printf("%x\n",msg.data[1]);*/
+		
+		joy_msg=send_joy_pos(&io);
 		//printf("%d \n", joy_msg.data[0]);
 		//printf("%d \n", joy_msg.data[1]);
 		
-		//can_message_send(&joy_msg);
-		//_delay_ms(100);
+		can_message_send(&joy_msg);
+		_delay_ms(1);
 		//SRAM_test();
 		
     }

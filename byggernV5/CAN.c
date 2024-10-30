@@ -140,10 +140,10 @@ can_message can_message_read (int buffer) {
 		dOO=RXB0D0;
 	}
 	if(buffer==1){
-			sidh=RXB1SIDH;
-			sidl=RXB1SIDL;
-			dlc=RXB1DLC;
-			dOO=RXB1D0;
+		sidh=RXB1SIDH;
+		sidl=RXB1SIDL;
+		dlc=RXB1DLC;
+		dOO=RXB1D0;
 	}
 	
     uint8_t high = can_cntrl_read(sidh);

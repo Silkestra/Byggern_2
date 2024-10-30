@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "fonts.h"
 #include "xmem.h"
+#include "CAN.h"
+#include <util/delay.h>
 #include <stdbool.h>
 #define oled_command (0x1000)
 #define oled_data (0x1200)
@@ -15,8 +17,6 @@ typedef enum {
 	DOWN,
 	NEUTRAL
 } Joy_direction;
-
-
 
 typedef struct {
 	const char** home_menu;
@@ -54,6 +54,8 @@ typedef struct {
 	bool changed_dir;
 	menu_item* current_node;
 	bool button_used;
+	int8_t offset_x;
+	int8_t offset_y;
 } IO;
 
 
@@ -69,7 +71,8 @@ void io_init(IO* io);
 void find_joy_dir(IO* io);
 void set_states(IO* io);
 void get_states(IO* io);
-int16_t convert(int16_t);
+int16_t convert_x(IO* io, int16_t value_read);
+int16_t convert_y(IO* io, int16_t value_read);
 int16_t get_joy_x(IO* io);
 int16_t get_joy_y(IO* io);
 int16_t get_slider_l(IO* io);
@@ -77,8 +80,8 @@ int16_t get_slider_r(IO* io);
 bool read_button(IO* io);
 void set_menu_ptr(IO* io);
 void jump_to_menu(IO* io);
-
-
+can_message send_joy_pos(IO* io);
+void joy_init(IO* io);
 
 
 // --------------------OLED-----------------------------

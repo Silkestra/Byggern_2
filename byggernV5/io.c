@@ -3,8 +3,7 @@
 #define BASE_ADDRESS 0x1000
 
 void io_init(IO* io){
-	io->joy_x = 0;
-	io->joy_y = 0;
+	joy_init(io);
 	io->slider_l = 0;
 	io->slider_r = 0;
 	io->joy_dir = NEUTRAL;
@@ -15,21 +14,31 @@ void io_init(IO* io){
 	io->button_used = false;
 }
 
-int16_t convert(int16_t value_read){
-	//int16_t offset = -9352;
-	int16_t offset = -9310;
-	int16_t value = value_read+offset;
-	int16_t normalized = value;
+void joy_init(IO* io){
 	
-	if(value > 3){
-		//normalized = value * 100 / 119;
-	} else if (value < -3){
-		normalized = value * 100 / 136;
-		//normalized = value * 100 / 124;
-	}
+	xmem_write(16, adc_adr, BASE_ADDRESS);
+	io->offset_x = xmem_read(adc_adr, BASE_ADDRESS);
+	io->offset_y = xmem_read(adc_adr, BASE_ADDRESS);
+	io->joy_x = 0;
+	io->joy_y = 0;
+}
+
+int16_t convert_x(IO* io, int16_t value_read){	
+	int16_t value = value_read + (io->offset_x);
+	int16_t normalized = value;
+	normalized = value * 100 / 128;
 	
 	return normalized;
 }
+
+int16_t convert_y(IO* io, int16_t value_read){
+	int16_t value = value_read + (io->offset_y);
+	int16_t normalized = value;
+	normalized = value * 100 / 128;
+	
+	return normalized;
+}
+
 
 void find_joy_dir(IO* io){
 	if((io->joy_x) > 60){
@@ -73,8 +82,8 @@ void find_joy_dir(IO* io){
 
 void set_states(IO* io){
 	xmem_write(16, adc_adr, BASE_ADDRESS);
-	io->joy_x = convert(xmem_read(adc_adr, BASE_ADDRESS));
-	io->joy_y = convert(xmem_read(adc_adr, BASE_ADDRESS));
+	io->joy_x = convert_x(io, xmem_read(adc_adr, BASE_ADDRESS));
+	io->joy_y = convert_y(io, xmem_read(adc_adr, BASE_ADDRESS));
 	//io->slider_l = xmem_read(adc_adr,BASE_ADDRESS)-9216;
 	//io->slider_r = xmem_read(adc_adr, BASE_ADDRESS)-9216;
 	io->slider_l = xmem_read(adc_adr,BASE_ADDRESS);
@@ -341,3 +350,17 @@ void button_clicked(IO* io){
 	}
 }
 
+can_message send_joy_pos(IO* io){
+	//get_joy_x(&)
+	char x_position = get_joy_x(io);
+	if(x_position > 249){
+		x_position = 0;
+	}
+	char y_position = get_joy_y(io);
+	if(y_position > 249){
+		y_position = 0;
+	}
+	
+	can_message msg = {0x7ff, 0x02, {x_position, y_position}};
+	return msg;
+}

@@ -15,16 +15,18 @@ void io_init(IO* io){
 }
 
 void joy_init(IO* io){
-	
-	xmem_write(16, adc_adr, BASE_ADDRESS);
-	io->offset_x = xmem_read(adc_adr, BASE_ADDRESS);
-	io->offset_y = xmem_read(adc_adr, BASE_ADDRESS);
-	io->joy_x = 0;
-	io->joy_y = 0;
+	//xmem_write(15, adc_adr, BASE_ADDRESS);
+	//io->offset_x = xmem_read(adc_adr, BASE_ADDRESS);
+	//io->offset_y = xmem_read(adc_adr, BASE_ADDRESS);
+	//io->joy_x = 0;
+	//io->joy_y = 0;
+	io->offset_x = -120;
+	io->offset_y = -120;
 }
 
 int16_t convert_x(IO* io, int16_t value_read){	
 	int16_t value = value_read + (io->offset_x);
+	//int16_t value = value_read;
 	int16_t normalized = value;
 	normalized = value * 100 / 128;
 	
@@ -33,6 +35,7 @@ int16_t convert_x(IO* io, int16_t value_read){
 
 int16_t convert_y(IO* io, int16_t value_read){
 	int16_t value = value_read + (io->offset_y);
+	//int16_t value = value_read;
 	int16_t normalized = value;
 	normalized = value * 100 / 128;
 	

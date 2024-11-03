@@ -121,7 +121,7 @@ int main(void)
 		//printf("%d \n", joy_msg.data[1]);
 		
 		can_message_send(&joy_msg);
-		_delay_ms(1);
+		//_delay_ms(1);
 		//SRAM_test();
 		
     }

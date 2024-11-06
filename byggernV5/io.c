@@ -12,6 +12,7 @@ void io_init(IO* io){
 	io->changed_dir = false;
 	io->current_node = NULL;
 	io->button_used = false;
+	io->game_active = false;
 }
 
 void joy_init(IO* io){
@@ -329,7 +330,7 @@ void menu_init(IO *io){
 	const char* home_menu[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4", "Menu 5"};
 	add_submenu_from_list(menu, home_menu, 5);
 	io->current_node = menu->first_child;
-	const char* home_menu1[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4", "Back"};
+	const char* home_menu1[] = {"Play game", "Back"};
 	add_submenu_from_list(menu->first_child, home_menu1, 5);
 	OLED_print_menu_2(menu);
 	
@@ -353,6 +354,12 @@ void button_clicked(IO* io){
 	}
 }
 
+void play_game(IO* io){
+	if(strcmp(io->current_node->menu_name, "Play game") == 1){
+		io->game_active = true;
+	}
+}
+
 can_message send_joy_pos(IO* io){
 	//get_joy_x(&)
 	char x_position = get_joy_x(io);
@@ -364,6 +371,6 @@ can_message send_joy_pos(IO* io){
 		y_position = 0;
 	}
 	
-	can_message msg = {0x7ff, 0x02, {x_position, y_position}};
+	can_message msg = {0x7ff, 0x03, {x_position, y_position, io->button_state}};
 	return msg;
 }

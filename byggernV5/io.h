@@ -40,7 +40,6 @@ typedef struct{
 	struct menu_item *next_sibling; 
 	char *menu_name; 
 	int8_t children_count; 
-	
 	} menu_item;
 
 typedef struct {
@@ -56,6 +55,7 @@ typedef struct {
 	bool button_used;
 	int8_t offset_x;
 	int8_t offset_y;
+	bool game_active;
 } IO;
 
 
@@ -82,6 +82,7 @@ void set_menu_ptr(IO* io);
 void jump_to_menu(IO* io);
 can_message send_joy_pos(IO* io);
 void joy_init(IO* io);
+void play_game(IO* io);
 
 
 // --------------------OLED-----------------------------

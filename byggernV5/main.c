@@ -86,10 +86,10 @@ int main(void)
 		*/
 	can_message joy_msg={};
 	can_message received={};
+	
 	//can_message msg;
     while (1) 
     {
-		
 		
 		//Write 
 		
@@ -116,14 +116,15 @@ int main(void)
 		printf("%x\n",msg.data[0]);
 		printf("%x\n",msg.data[1]);*/
 		
-		joy_msg=send_joy_pos(&io);
 		//printf("%d \n", joy_msg.data[0]);
 		//printf("%d \n", joy_msg.data[1]);
 		
-		can_message_send(&joy_msg);
 		//_delay_ms(1);
 		//SRAM_test();
-		
+		if(io.game_active){
+			joy_msg=send_joy_pos(&io);
+			can_message_send(&joy_msg);
+		}
     }
 }
 

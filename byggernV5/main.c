@@ -121,6 +121,11 @@ int main(void)
 		
 		//_delay_ms(1);
 		//SRAM_test();
+		
+		//joy_msg=send_joy_pos(&io);
+		//can_message_send(&joy_msg);
+		printf("%d\n", io.game_active);
+		
 		if(io.game_active){
 			joy_msg=send_joy_pos(&io);
 			can_message_send(&joy_msg);

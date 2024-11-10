@@ -170,8 +170,6 @@ void jump_to_menu(IO* io){
 		OLED_reset();
 		//OLED_print_menu();
 	}
-	
-	
 }
 
 void oled_init(void) {
@@ -330,7 +328,7 @@ void menu_init(IO *io){
 	const char* home_menu[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4", "Menu 5"};
 	add_submenu_from_list(menu, home_menu, 5);
 	io->current_node = menu->first_child;
-	const char* home_menu1[] = {"Play game", "Back"};
+	const char* home_menu1[] = {"Play", "2", "1", "3", "Back"};
 	add_submenu_from_list(menu->first_child, home_menu1, 5);
 	OLED_print_menu_2(menu);
 	
@@ -341,6 +339,8 @@ void button_clicked(IO* io){
 		io->button_used = true;
 		return;
 	}
+	
+	play_game(io);
 	
 	if(io->button_state){
 		if(strcmp(io->current_node->menu_name, "Back") == 0){
@@ -355,8 +355,10 @@ void button_clicked(IO* io){
 }
 
 void play_game(IO* io){
-	if(strcmp(io->current_node->menu_name, "Play game") == 1){
-		io->game_active = true;
+	if(io->button_state){
+		if(strcmp(io->current_node->menu_name, "Play") == 0){
+			io->game_active = true;
+		}
 	}
 }
 

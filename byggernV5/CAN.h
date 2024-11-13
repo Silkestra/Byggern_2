@@ -13,8 +13,6 @@ typedef struct {
 	char data [8];
 } can_message;
 
-
-//CAN Controller functions
 void can_cntrl_config(void);
 uint16_t can_cntrl_read(uint8_t address);
 void can_cntrl_write(int8_t address, int8_t data);

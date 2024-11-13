@@ -1,6 +1,6 @@
 #pragma once
 #include <avr/io.h>
-#include <stdio.h>  // Required for FILE
+#include <stdio.h> 
 
 #define F_CPU 4915200UL
 #define FOSC 4915200UL

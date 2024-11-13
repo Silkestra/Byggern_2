@@ -57,19 +57,6 @@ int8_t can_cntrl_read_status(void){
 	return result;
 }
 
-/*void can_cntrl_int_config(void){
-	//DDRE = (1<<PE0); //interrupt pin enable 
-	int8_t current_value = can_cntrl_read(MCP_CANINTE);
-	current_value |= 0x1F
-	can_cntrl_write(MCP_CANINTE, current_value);
-
-}
-void ISR(void){
-	
-}
-*/
-
-
 void can_cntrl_config(void){
 	can_cntrl_reset();
 	_delay_ms(1); //delay viktig 
@@ -90,27 +77,9 @@ void can_cntrl_config(void){
 	
 	//Set operation mode
 	int8_t canctrl_value = can_cntrl_read(CANCTRL);
-	//printf("%d", canctrl_value);
 	canctrl_value &= ~(0xE0);
 	canctrl_value |= (0x00 << 5);
-	//printf("%d", canctrl_value);
-	
 	can_cntrl_write(CANCTRL, canctrl_value);
-	
-	/*can_cntrl_write(RXB0CTRL, 0x60); // Set RXB0 to accept all messages
-	
-	// Set masks to accept all bits
-	can_cntrl_write(RXM0SIDH, 0x00);
-	can_cntrl_write(RXM0SIDL, 0x00);
-	can_cntrl_write(RXM1SIDH, 0x00);
-	can_cntrl_write(RXM1SIDL, 0x00);
-	
-	// Configure filters to accept all messages
-	can_cntrl_write(RXF0SIDH, 0x00);
-	can_cntrl_write(RXF0SIDL, 0x00);
-	can_cntrl_write(RXF1SIDH, 0x00);
-	can_cntrl_write(RXF1SIDL, 0x00);*/
-	
 	SPI_SS_high();
 }
 

@@ -26,13 +26,6 @@ typedef struct {
 	const char** menu4;
 } MENU_lists;
 
-//const char* home_menu[] = {"HOME", "Menu 1", "Menu 2", "Menu 3", "Menu 4", "Menu 5"};
-//const char* menu1[] = {"Menu 1", "Test 1", "Test 2", "Back"};
-//const char* menu2[] = {"Menu 2", "Test 1", "Test 2", "Back"};
-//const char* menu3[] = {"Menu 3", "Test 1", "Test 2", "Back"};
-//const char* menu4[] = {"Menu 4", "Test 1", "Test 2", "Back"};
-
-
 typedef struct{
 	struct menu_item *parent; 
 	struct menu_item *first_child;
@@ -59,13 +52,9 @@ typedef struct {
 	menu_item* death_node;
 	menu_item* main_menu_node;
 } IO;
-
-
 	
 menu_item *create_menu_item (const char *name, menu_item *parent);
-
 void add_submenu(menu_item *parent, const char *name);
-
 void add_submenu_from_list(menu_item *parent, const char** menu_list, int8_t length);
 
 //--------------------
@@ -100,11 +89,8 @@ void OLED_print(char* ch);
 int16_t array_size(const char* arr);
 void OLED_home(char* menu_list[], int16_t length);
 void OLED_print_menu(char* menu_list[], int16_t length);
-//void OLED_set_brightness(lvl);
-
 
 //MENU
 
 void menu_init(IO *io);
 void button_clicked(IO* io);
-//menu_item *page_to_sibling(void);

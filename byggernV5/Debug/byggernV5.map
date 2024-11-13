@@ -774,38 +774,38 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2df8
+.debug_info     0x00000000     0x2df4
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5d0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega162/avr5/crtatmega162.o
  .debug_info    0x000005d0      0x734 CAN.o
  .debug_info    0x00000d04       0xe9 fonts.o
- .debug_info    0x00000ded     0x15ec io.o
- .debug_info    0x000023d9      0x57e main.o
- .debug_info    0x00002957       0xf2 SPI.o
- .debug_info    0x00002a49      0x256 UART.o
- .debug_info    0x00002c9f      0x159 xmem.o
+ .debug_info    0x00000ded     0x15e8 io.o
+ .debug_info    0x000023d5      0x57e main.o
+ .debug_info    0x00002953       0xf2 SPI.o
+ .debug_info    0x00002a45      0x256 UART.o
+ .debug_info    0x00002c9b      0x159 xmem.o
 
-.debug_abbrev   0x00000000      0xf1e
+.debug_abbrev   0x00000000      0xf04
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x580 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega162/avr5/crtatmega162.o
  .debug_abbrev  0x00000580      0x20a CAN.o
  .debug_abbrev  0x0000078a       0x50 fonts.o
- .debug_abbrev  0x000007da      0x2ca io.o
- .debug_abbrev  0x00000aa4      0x195 main.o
- .debug_abbrev  0x00000c39       0xa1 SPI.o
- .debug_abbrev  0x00000cda      0x182 UART.o
- .debug_abbrev  0x00000e5c       0xc2 xmem.o
+ .debug_abbrev  0x000007da      0x2b0 io.o
+ .debug_abbrev  0x00000a8a      0x195 main.o
+ .debug_abbrev  0x00000c1f       0xa1 SPI.o
+ .debug_abbrev  0x00000cc0      0x182 UART.o
+ .debug_abbrev  0x00000e42       0xc2 xmem.o
 
-.debug_line     0x00000000     0x1286
+.debug_line     0x00000000     0x1285
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x140 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega162/avr5/crtatmega162.o
- .debug_line    0x00000140      0x34d CAN.o
- .debug_line    0x0000048d       0x2a fonts.o
- .debug_line    0x000004b7      0x8ec io.o
- .debug_line    0x00000da3      0x1c6 main.o
- .debug_line    0x00000f69      0x100 SPI.o
- .debug_line    0x00001069      0x140 UART.o
- .debug_line    0x000011a9       0xdd xmem.o
+ .debug_line    0x00000140      0x34c CAN.o
+ .debug_line    0x0000048c       0x2a fonts.o
+ .debug_line    0x000004b6      0x8ec io.o
+ .debug_line    0x00000da2      0x1c6 main.o
+ .debug_line    0x00000f68      0x100 SPI.o
+ .debug_line    0x00001068      0x140 UART.o
+ .debug_line    0x000011a8       0xdd xmem.o
 
 .debug_frame    0x00000000      0x648
  *(.debug_frame)

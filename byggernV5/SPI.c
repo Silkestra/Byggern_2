@@ -2,13 +2,12 @@
 
 
 void SPI_SS_low(void) {
-	PORTB &= ~(1 << PB4);  // Pull SS/CS (PB4) low to select the slave
+	PORTB &= ~(1 << PB4);  // Dra SS/CS lav for å velge slave
 }
 
 void SPI_SS_high(void) {
-	PORTB |= (1 << PB4);   // Pull SS/CS (PB4) high to deselect the slave
+	PORTB |= (1 << PB4);   // Dra SS/CS høy for å deselecte slave
 }
-
 
 //SPI functions
 void SPI_master_init(void){
@@ -20,6 +19,6 @@ void SPI_master_init(void){
 uint8_t SPI_MasterTransmit(char cData){
 	SPDR = cData; //Start transmission
 	while(!(SPSR & (1<<SPIF))){
-		} //Wait for transmission complete
+		} // Wait for transmission complete
 	return SPDR;
 }

@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000270  00000000  00000000  00001ac4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00002df8  00000000  00000000  00001d34  2**0
+  6 .debug_info   00002df4  00000000  00000000  00001d34  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000f1e  00000000  00000000  00004b2c  2**0
+  7 .debug_abbrev 00000f04  00000000  00000000  00004b28  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001286  00000000  00000000  00005a4a  2**0
+  8 .debug_line   00001285  00000000  00000000  00005a2c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000648  00000000  00000000  00006cd0  2**2
+  9 .debug_frame  00000648  00000000  00000000  00006cb4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000959  00000000  00000000  00007318  2**0
+ 10 .debug_str    00000959  00000000  00000000  000072fc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000163c  00000000  00000000  00007c71  2**0
+ 11 .debug_loc    0000163c  00000000  00000000  00007c55  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000001f8  00000000  00000000  000092ad  2**0
+ 12 .debug_ranges 000001f8  00000000  00000000  00009291  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -540,9 +540,6 @@ Disassembly of section .text:
      41c:	08 95       	ret
 
 0000041e <can_cntrl_config>:
-}
-*/
-
 
 void can_cntrl_config(void){
 	can_cntrl_reset();
@@ -584,21 +581,13 @@ void can_cntrl_config(void){
 	int8_t canctrl_value = can_cntrl_read(CANCTRL);
      44a:	8f e0       	ldi	r24, 0x0F	; 15
      44c:	0e 94 d3 01 	call	0x3a6	; 0x3a6 <can_cntrl_read>
-	//printf("%d", canctrl_value);
 	canctrl_value &= ~(0xE0);
      450:	68 2f       	mov	r22, r24
      452:	6f 71       	andi	r22, 0x1F	; 31
 	canctrl_value |= (0x00 << 5);
-	//printf("%d", canctrl_value);
-	
 	can_cntrl_write(CANCTRL, canctrl_value);
      454:	8f e0       	ldi	r24, 0x0F	; 15
      456:	0e 94 e7 01 	call	0x3ce	; 0x3ce <can_cntrl_write>
-	can_cntrl_write(RXF0SIDH, 0x00);
-	can_cntrl_write(RXF0SIDL, 0x00);
-	can_cntrl_write(RXF1SIDH, 0x00);
-	can_cntrl_write(RXF1SIDL, 0x00);*/
-	
 	SPI_SS_high();
      45a:	0e 94 c4 07 	call	0xf88	; 0xf88 <SPI_SS_high>
      45e:	08 95       	ret
@@ -1571,7 +1560,6 @@ void add_submenu_from_list(menu_item *parent, const char** menu_list, int8_t len
      b1e:	c0 e0       	ldi	r28, 0x00	; 0
      b20:	d0 e0       	ldi	r29, 0x00	; 0
      b22:	0b c0       	rjmp	.+22     	; 0xb3a <add_submenu_from_list+0x30>
-		/*printf("%s: %s\n", parent->menu_name, menu_list[i]);*/
 		add_submenu(parent, menu_list[i]);
      b24:	fe 01       	movw	r30, r28
      b26:	ee 0f       	add	r30, r30
@@ -1596,7 +1584,6 @@ void add_submenu_from_list(menu_item *parent, const char** menu_list, int8_t len
      b42:	c8 17       	cp	r28, r24
      b44:	d9 07       	cpc	r29, r25
      b46:	74 f3       	brlt	.-36     	; 0xb24 <add_submenu_from_list+0x1a>
-		/*printf("%s: %s\n", parent->menu_name, menu_list[i]);*/
 		add_submenu(parent, menu_list[i]);
 	}
 }
@@ -1674,10 +1661,6 @@ void OLED_print_menu_2(menu_item* parent){
      baa:	08 95       	ret
 
 00000bac <menu_init>:
-	for(int i=0; i<page_number; i++){
-		
-	} 
-}*/
 
 void menu_init(IO *io){
      bac:	ef 92       	push	r14
@@ -1917,10 +1900,7 @@ void button_clicked(IO* io){
      d26:	91 81       	ldd	r25, Z+1	; 0x01
      d28:	9d 87       	std	Y+13, r25	; 0x0d
      d2a:	8c 87       	std	Y+12, r24	; 0x0c
-		
-		/*if(strcmp(io->current_node->menu_name, "Shoot") == 0){
-			io->current_node = io->current_node->parent;
-		}*/
+		}
 		
 		if(strcmp(io->current_node->menu_name, "Play again") == 0){
      d2c:	ec 85       	ldd	r30, Y+12	; 0x0c
@@ -2011,8 +1991,6 @@ void set_states(IO* io){
      db4:	0e 94 12 03 	call	0x624	; 0x624 <convert_y>
      db8:	9b 83       	std	Y+3, r25	; 0x03
      dba:	8a 83       	std	Y+2, r24	; 0x02
-	//io->slider_l = xmem_read(adc_adr,BASE_ADDRESS)-9216;
-	//io->slider_r = xmem_read(adc_adr, BASE_ADDRESS)-9216;
 	io->slider_l = xmem_read(adc_adr,BASE_ADDRESS);
      dbc:	60 e0       	ldi	r22, 0x00	; 0
      dbe:	70 e1       	ldi	r23, 0x10	; 16
@@ -2063,7 +2041,6 @@ can_message send_joy_pos(IO* io){
      e08:	df 93       	push	r29
      e0a:	ec 01       	movw	r28, r24
      e0c:	8b 01       	movw	r16, r22
-	//get_joy_x(&)
 	char x_position = get_joy_x(io);
      e0e:	cb 01       	movw	r24, r22
      e10:	0e 94 c4 03 	call	0x788	; 0x788 <get_joy_x>
@@ -2147,7 +2124,6 @@ int main(void)
      e82:	de bf       	out	0x3e, r29	; 62
      e84:	0f be       	out	0x3f, r0	; 63
      e86:	cd bf       	out	0x3d, r28	; 61
-	/* Replace with your application code */
 	pwm_init();
      e88:	0e 94 2c 07 	call	0xe58	; 0xe58 <pwm_init>
 	USART_Init(MYUBRR);
@@ -2168,28 +2144,18 @@ int main(void)
      ea4:	0e 94 e3 02 	call	0x5c6	; 0x5c6 <io_init>
 	OLED_reset();
      ea8:	0e 94 b1 04 	call	0x962	; 0x962 <OLED_reset>
-	//OLED_print_menu((char** ) current_menu->items, current_menu->num_items);
 	
-	//const char* menu1[] = {"Menu 1", "HOME", "Test 1", "Test 2"};
-	//int16_t menu1_length = sizeof(menu1) / sizeof(menu1[0]);
 	
 	menu_init(&io);
      eac:	ce 01       	movw	r24, r28
      eae:	01 96       	adiw	r24, 0x01	; 1
      eb0:	0e 94 d6 05 	call	0xbac	; 0xbac <menu_init>
-	
-	//initalize death menu
-	
-	
 	SPI_master_init();
      eb4:	0e 94 c8 07 	call	0xf90	; 0xf90 <SPI_master_init>
 	can_cntrl_config();
      eb8:	0e 94 0f 02 	call	0x41e	; 0x41e <can_cntrl_config>
-		uint8_t dlc = can_cntrl_read(RXB0DLC) & 0x0F; // Mask to get only the lower 4 bits (DLC)
 		
-		uint8_t out1 = can_cntrl_read(RXB0D0);
-		uint8_t out2 = can_cntrl_read(RXB0D1);
-		*/
+	can_message msg = {0x7ff, 0x02, {0xa0, 0x54}};
 	can_message joy_msg={};
      ebc:	fe 01       	movw	r30, r28
      ebe:	77 96       	adiw	r30, 0x17	; 23
@@ -2200,7 +2166,6 @@ int main(void)
      ec8:	e9 f7       	brne	.-6      	; 0xec4 <main+0x50>
 	can_message received={0x000,0x01,{0x0}};
 	
-	//can_message msg;
 	can_cntrl_write(0x2C, can_cntrl_read(0x2C) & ~0x01);
      eca:	8c e2       	ldi	r24, 0x2C	; 44
      ecc:	0e 94 d3 01 	call	0x3a6	; 0x3a6 <can_cntrl_read>
@@ -2208,17 +2173,13 @@ int main(void)
      ed2:	6e 7f       	andi	r22, 0xFE	; 254
      ed4:	8c e2       	ldi	r24, 0x2C	; 44
      ed6:	0e 94 e7 01 	call	0x3ce	; 0x3ce <can_cntrl_write>
-		_delay_ms(10);
-		uint16_t value=adc[0];
-		printf("Adc-verdi: %u\n\n",value);
-		_delay_ms(10);*/
-		
+	
+    while (1) 
+    {
 		set_states(&io);
      eda:	ce 01       	movw	r24, r28
      edc:	01 96       	adiw	r24, 0x01	; 1
      ede:	0e 94 ba 06 	call	0xd74	; 0xd74 <set_states>
-		//can_message_send(&msg);
-		//_delay_ms(10);
 		get_states(&io);
      ee2:	ce 01       	movw	r24, r28
      ee4:	01 96       	adiw	r24, 0x01	; 1
@@ -2265,11 +2226,7 @@ int main(void)
      f2e:	0e 94 ac 05 	call	0xb58	; 0xb58 <OLED_print_menu_2>
      f32:	0f 90       	pop	r0
      f34:	0f 90       	pop	r0
-		//_delay_ms(1);
-		//SRAM_test();
-		
-		//joy_msg=send_joy_pos(&io);
-		//can_message_send(&joy_msg);
+		} 
 		printf("game active %d\n", io.game_active);
      f36:	8a 89       	ldd	r24, Y+18	; 0x12
      f38:	1f 92       	push	r1
@@ -2315,7 +2272,7 @@ int main(void)
 
 
 void SPI_SS_low(void) {
-	PORTB &= ~(1 << PB4);  // Pull SS/CS (PB4) low to select the slave
+	PORTB &= ~(1 << PB4);  // Dra SS/CS lav for å velge slave
      f80:	88 b3       	in	r24, 0x18	; 24
      f82:	8f 7e       	andi	r24, 0xEF	; 239
      f84:	88 bb       	out	0x18, r24	; 24
@@ -2325,7 +2282,7 @@ void SPI_SS_low(void) {
 }
 
 void SPI_SS_high(void) {
-	PORTB |= (1 << PB4);   // Pull SS/CS (PB4) high to deselect the slave
+	PORTB |= (1 << PB4);   // Dra SS/CS høy for å deselecte slave
      f88:	88 b3       	in	r24, 0x18	; 24
      f8a:	80 61       	ori	r24, 0x10	; 16
      f8c:	88 bb       	out	0x18, r24	; 24
@@ -2333,7 +2290,6 @@ void SPI_SS_high(void) {
 
 00000f90 <SPI_master_init>:
 }
-
 
 //SPI functions
 void SPI_master_init(void){
@@ -2356,17 +2312,17 @@ uint8_t SPI_MasterTransmit(char cData){
 	while(!(SPSR & (1<<SPIF))){
      fa0:	77 9b       	sbis	0x0e, 7	; 14
      fa2:	fe cf       	rjmp	.-4      	; 0xfa0 <SPI_MasterTransmit+0x2>
-		} //Wait for transmission complete
+		} // Wait for transmission complete
 	return SPDR;
      fa4:	8f b1       	in	r24, 0x0f	; 15
 }
      fa6:	08 95       	ret
 
 00000fa8 <USART_Init>:
-	/* Wait for data to be received */
-	while ( !(UCSR0A & (1<<RXC0)) )
-	;
-	/* Get and return received data from buffer */
+
+unsigned char USART_Receive( void )
+{
+	while ( !(UCSR0A & (1<<RXC0)) );
 	return UDR0;
 }
      fa8:	90 bd       	out	0x20, r25	; 32
@@ -2414,7 +2370,6 @@ void init_printf(void)
 #include "xmem.h"
 #include <avr/io.h>
 
-
 void xmem_init ( void ){
 	MCUCR |= (1 << SRE ); // enable XMEM
      fe8:	85 b7       	in	r24, 0x35	; 53
@@ -2446,7 +2401,6 @@ void xmem_write ( uint8_t data , uint16_t addr, uint16_t base_address){
 00001006 <xmem_read>:
 }
 
-
 uint8_t xmem_read ( uint16_t addr, uint16_t base_address){
 	volatile char * ext_mem = ( char *) base_address;
 	uint8_t ret_val = ext_mem [ addr ];
@@ -2455,7 +2409,6 @@ uint8_t xmem_read ( uint16_t addr, uint16_t base_address){
     100a:	fc 01       	movw	r30, r24
     100c:	80 81       	ld	r24, Z
 	return ret_val ;
-}
     100e:	08 95       	ret
 
 00001010 <malloc>:

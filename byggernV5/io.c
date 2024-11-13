@@ -18,18 +18,12 @@ void io_init(IO* io){
 }
 
 void joy_init(IO* io){
-	//xmem_write(15, adc_adr, BASE_ADDRESS);
-	//io->offset_x = xmem_read(adc_adr, BASE_ADDRESS);
-	//io->offset_y = xmem_read(adc_adr, BASE_ADDRESS);
-	//io->joy_x = 0;
-	//io->joy_y = 0;
 	io->offset_x = -120;
 	io->offset_y = -120;
 }
 
 int16_t convert_x(IO* io, int16_t value_read){	
 	int16_t value = value_read + (io->offset_x);
-	//int16_t value = value_read;
 	int16_t normalized = value;
 	normalized = value * 100 / 128;
 	
@@ -38,7 +32,6 @@ int16_t convert_x(IO* io, int16_t value_read){
 
 int16_t convert_y(IO* io, int16_t value_read){
 	int16_t value = value_read + (io->offset_y);
-	//int16_t value = value_read;
 	int16_t normalized = value;
 	normalized = value * 100 / 128;
 	
@@ -90,8 +83,6 @@ void set_states(IO* io){
 	xmem_write(16, adc_adr, BASE_ADDRESS);
 	io->joy_x = convert_x(io, xmem_read(adc_adr, BASE_ADDRESS));
 	io->joy_y = convert_y(io, xmem_read(adc_adr, BASE_ADDRESS));
-	//io->slider_l = xmem_read(adc_adr,BASE_ADDRESS)-9216;
-	//io->slider_r = xmem_read(adc_adr, BASE_ADDRESS)-9216;
 	io->slider_l = xmem_read(adc_adr,BASE_ADDRESS);
 	io->slider_r = xmem_read(adc_adr,BASE_ADDRESS);
 	find_joy_dir(io);
@@ -131,7 +122,6 @@ bool read_button(IO* io){
 	PORTB = (1 << PB2);
 	DDRB &= ~(1 << DDB2);
 	SFIOR = (0 << PUD);
-	//printf("Button: %d \n", button);
 	bool button_state = false;
 	
 	if(PINB & (1 << PB2)){
@@ -164,13 +154,9 @@ void set_menu_ptr(IO *io){
 	OLED_print("<-");
 }
 
-
-//begrense hvor pil går
-
 void jump_to_menu(IO* io){
 	if(io->button_state == true){
 		OLED_reset();
-		//OLED_print_menu();
 	}
 }
 
@@ -201,8 +187,6 @@ void oled_init(void) {
 
 void OLED_goto_row(int8_t row){
 	xmem_write(0xB0 + row, 0, oled_command);
-	//printf("%d\n", 0xB0+row);
-	//printf("%d\n", 0xB0 + row + 0xB5);
 }
 
 void OLED_goto_column(int8_t column){
@@ -297,7 +281,6 @@ void add_submenu(menu_item *parent, const char *name){
 
 void add_submenu_from_list(menu_item *parent, const char** menu_list, int8_t length){
 	for(int i=0; i<length; i++){
-		/*printf("%s: %s\n", parent->menu_name, menu_list[i]);*/
 		add_submenu(parent, menu_list[i]);
 	}
 }
@@ -316,13 +299,6 @@ void OLED_print_menu_2(menu_item* parent){
 		i++;
 	}
 }
-
-/*menu_item *page_to_sibling(IO* io){
-	int page_number = io->menu_ptr;
-	for(int i=0; i<page_number; i++){
-		
-	} 
-}*/
 
 void menu_init(IO *io){
 	menu_item *menu = create_menu_item("Home", NULL); 
@@ -362,10 +338,6 @@ void button_clicked(IO* io){
 			io->current_node = io->current_node->parent;
 		}
 		
-		/*if(strcmp(io->current_node->menu_name, "Shoot") == 0){
-			io->current_node = io->current_node->parent;
-		}*/
-		
 		if(strcmp(io->current_node->menu_name, "Play again") == 0){
 			io->current_node = io->main_menu_node;
 		}
@@ -389,7 +361,6 @@ void play_game(IO* io){
 }
 
 can_message send_joy_pos(IO* io){
-	//get_joy_x(&)
 	char x_position = get_joy_x(io);
 	if(x_position > 249){
 		x_position = 0;

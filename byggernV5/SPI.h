@@ -1,8 +1,6 @@
 #include <avr/io.h>
 
-
 void SPI_SS_low(void);
-
 void SPI_SS_high(void);
 
 //SPI functions

@@ -155,5 +155,12 @@ can_message can_message_read (int buffer) {
 	for (int i = 0; i < msg.data_length; i++){
 		msg.data[i] = can_cntrl_read(dOO + i);
 	}
+	 if (buffer == 0) {
+		    // Clear interrupt flag for buffer 0
+		  can_cntrl_write(0x2C, can_cntrl_read(0x2C) & ~0x01);
+		    } else if (buffer == 1) {
+		    // Clear interrupt flag for buffer 1
+		    can_cntrl_write(0x2C, can_cntrl_read(0x2C) & ~0x02); //canintf=0x2C
+	    }
 	return msg;
 }

@@ -11,6 +11,8 @@ void io_init(IO* io){
 	io->menu_ptr = 2;
 	io->changed_dir = false;
 	io->current_node = NULL;
+	io->death_node = NULL;
+	io->main_menu_node = NULL;
 	io->button_used = false;
 	io->game_active = false;
 }
@@ -325,12 +327,24 @@ void OLED_print_menu_2(menu_item* parent){
 void menu_init(IO *io){
 	menu_item *menu = create_menu_item("Home", NULL); 
 	
-	const char* home_menu[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4", "Menu 5"};
+	const char* home_menu[] = {"Menu 1", "Menu 2", "Menu 3", "Menu 4", "Menu 5", " "};
 	add_submenu_from_list(menu, home_menu, 5);
 	io->current_node = menu->first_child;
-	const char* home_menu1[] = {"Play", "2", "1", "3", "Back"};
-	add_submenu_from_list(menu->first_child, home_menu1, 5);
+	io->main_menu_node = menu->first_child;
+	
+	const char* home_menu1[] = {"Play", "Back"};
+	add_submenu_from_list(menu->first_child, home_menu1, 2);
+	
+	const char* play_menu[] = {"Shoot"};
+	add_submenu_from_list(io->current_node->first_child, play_menu, 1);
+	
+	
 	OLED_print_menu_2(menu);
+	
+	menu_item *death_menu = create_menu_item("Game Over", NULL);
+	const char* game_over[] = {"Play again"};
+	add_submenu_from_list(death_menu, game_over, 1);
+	io->death_node=death_menu->first_child;
 	
 }
 
@@ -348,9 +362,21 @@ void button_clicked(IO* io){
 			io->current_node = io->current_node->parent;
 		}
 		
-		OLED_print_menu_2(io->current_node);
-		io->current_node = io->current_node->first_child;
-		io->menu_ptr = 2;
+		/*if(strcmp(io->current_node->menu_name, "Shoot") == 0){
+			io->current_node = io->current_node->parent;
+		}*/
+		
+		if(strcmp(io->current_node->menu_name, "Play again") == 0){
+			io->current_node = io->main_menu_node;
+		}
+		
+		if(io->current_node->first_child != NULL ){
+			OLED_print_menu_2(io->current_node);
+			io->current_node = io->current_node->first_child;
+			io->menu_ptr = 2;
+		}
+
+		
 	}
 }
 

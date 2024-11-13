@@ -56,6 +56,8 @@ typedef struct {
 	int8_t offset_x;
 	int8_t offset_y;
 	bool game_active;
+	menu_item* death_node;
+	menu_item* main_menu_node;
 } IO;
 
 

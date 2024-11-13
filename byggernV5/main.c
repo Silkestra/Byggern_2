@@ -56,6 +56,10 @@ int main(void)
 	//int16_t menu1_length = sizeof(menu1) / sizeof(menu1[0]);
 	
 	menu_init(&io);
+	
+	//initalize death menu
+	
+	
 	SPI_master_init();
 	can_cntrl_config();
 	//printf(io.joy_x);
@@ -85,9 +89,10 @@ int main(void)
 		uint8_t out2 = can_cntrl_read(RXB0D1);
 		*/
 	can_message joy_msg={};
-	can_message received={};
+	can_message received={0x000,0x01,{0x0}};
 	
 	//can_message msg;
+	can_cntrl_write(0x2C, can_cntrl_read(0x2C) & ~0x01);
     while (1) 
     {
 		
@@ -105,9 +110,16 @@ int main(void)
 		//_delay_ms(10);
 		get_states(&io);
 		
-		/*msg = can_message_read(0);
-		printf("%x\n",msg.data[0]);
-		printf("%x\n",msg.data[1]);*/
+		received = can_message_read(0);
+		printf("Received id: %x\n", received.id);
+		if(received.id == 0x001){
+			printf("Game over");
+			io.game_active = false;
+			io.current_node = io.death_node;
+			OLED_print_menu_2(io.current_node);
+		} 
+		
+		//printf("%x\n",msg.data[1]);
 		/*msg = can_message_read(1);
 		printf("%x\n",msg.data[0]);
 		printf("%x\n",msg.data[1]);*/
@@ -124,7 +136,7 @@ int main(void)
 		
 		//joy_msg=send_joy_pos(&io);
 		//can_message_send(&joy_msg);
-		printf("%d\n", io.game_active);
+		printf("game active %d\n", io.game_active);
 		
 		if(io.game_active){
 			joy_msg=send_joy_pos(&io);
